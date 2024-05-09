@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kun.uz</title>
+    <link rel="stylesheet" href="{% static 'css/auth/verification.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>Verification Code</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="number" id="verification_code" name="verification_code" placeholder="Enter your verification code here">
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+</html>

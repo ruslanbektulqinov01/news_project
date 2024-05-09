@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include "login_head.html" %}
+<body>
+    <div class="cont">
+        <form method="post">
+            <h1>Login</h1>
+            {% csrf_token %}
+            <label for="email">Email</label>
+            <label>
+                <input name='email' type="email" placeholder="Emailingizni kiriting">
+            </label>
+            <label for="">Password</label>
+            <label>
+                <input name='password' type="password" placeholder="Passwordingizni kiriting">
+            </label>
+            <a href="{% url 'forgot_password' %}" style="color: #007bff">Forgot password?</a>
+            <button type="submit">Sign In</button>
+            <p>or</p>
+            <a href="{% url 'register' %}" style="color: #007bff">Register</a>
+        </form>
+    </div>
+</body>
+</html>

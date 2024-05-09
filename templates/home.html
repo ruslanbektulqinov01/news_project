@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include "head.html" %}
+<body>
+    {% include "login_navbar.html" %}
+
+    <main class="content">
+        <section class="article-grid">
+            {% for maqola in articles %}
+                <article class="article-card">
+                    <a href="{% url 'article_detail' maqola.id %}">
+                        <img src="{{ maqola.imageURL }}" alt="{{ maqola.title }} description" width="300px" height="200px">
+                    </a>
+                    <div class="article-content">
+                        <h4>{{ maqola.title }}</h4>
+                        <p>Author: {{ maqola.author }}</p>
+                        <p>Created: {{ maqola.created }}</p>
+                    </div>
+                </article>
+            {% endfor %}
+        </section>
+    </main>
+</body>
+</html>

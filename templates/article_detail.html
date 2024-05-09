@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kun.uz - {{ article.title }}</title>
+    <link rel="stylesheet" href="{% static 'css/article_detail.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+<div class="container">
+
+    {% include "login_navbar.html" %}
+
+    <main class="content">
+        <article class="article-detail">
+            <div class="article-header">
+                <h1>{{ article.title }}</h1>
+                <img src="{{ article.imageURL }}" alt="{{ article.title }} description" width="700px" height="350px">
+            </div>
+            <div class="article-info">
+                <p>Author: {{ article.author }}</p>
+                <p>Published: {{ article.created }}</p>
+            </div>
+            <div class="article-content">
+                <p>{{ article.description }}</p>
+            </div>
+            <div class="article-actions">
+                <form method="POST" id="like-form">
+                    {% csrf_token %}
+                    <button type="submit" name="like" id="like-button">
+                        <i class="fas fa-thumbs-up"></i> Like
+                    </button>
+                </form>
+
+                <form method="POST" id="dislike-form">
+                    {% csrf_token %}
+                    <button type="submit" name="dislike" id="dislike-button">
+                        <i class="fas fa-thumbs-down"></i> Dislike
+                    </button>
+                </form>
+            </div>
+
+
+            <section class="comments">
+                <h3>Comments:</h3>
+                {% for comment in comments %}
+                    <div class="comment">
+                        <p>User: {{ comment.user_id.email }}, Comment: {{ comment.text }}, Created
+                            at: {{ comment.created_at }}</p>
+                    </div>
+                {% endfor %}
+                <form method="POST" class="comment-form">
+                    {% csrf_token %}
+                    <textarea name="comment" placeholder="Write your comment here..."></textarea>
+                    <button type="submit">Comment</button>
+                </form>
+            </section>
+        </article>
+    </main>
+
+</div>
+<script>
+    document.getElementById('like-button').addEventListener('click', function () {
+        this.classList.add('active');
+        document.getElementById('dislike-button').classList.remove('active');
+    });
+
+    document.getElementById('dislike-button').addEventListener('click', function () {
+        this.classList.add('active');
+        document.getElementById('like-button').classList.remove('active');
+    });
+
+</script>
+</body>
+</html>
