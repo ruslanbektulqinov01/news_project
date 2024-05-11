@@ -19,15 +19,19 @@ def register(request):
         ex_user = CustomUser.objects.filter(email=email).first()
         if password1 != password2 or not email.strip():
             return redirect('register')
-        elif ex_user:
+        elif ex_user and ex_user.is_active:
             return HttpResponse('<h1>This email was previously registered</h1>')
+        elif ex_user and not ex_user.is_active:
+            print(ex_user)
+            ex_user.delete()
         else:
             user = CustomUser.objects.create_user(email=email, first_name=first_name, last_name=last_name,
                                                   password=password1, is_active=False)
             random_verify_code = random.randint(100000, 999999)
             VerificationCode.objects.create(user=user, verification_code=random_verify_code)
             try:
-                send_mail('VerificationCode', f'Your verification code is {random_verify_code}', settings.EMAIL_HOST_USER,
+                send_mail('VerificationCode', f'Your verification code is {random_verify_code}',
+                          settings.EMAIL_HOST_USER,
                           [email], fail_silently=False)
             except gaierror as e:
                 user = CustomUser.objects.get(email=email)
