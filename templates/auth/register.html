@@ -4,31 +4,31 @@
 <body>
 <div class="cont">
     <form method="post">
-        <h1>Register page</h1>
+        <h1>Create an account</h1>
         {% csrf_token %}
-        <label for="">Email</label>
         <label>
-            <input name='email' type="email" placeholder="Enter the your email">
+            <input name='email' type="email" placeholder="Email">
         </label>
-        <label for="">First Name</label>
-        <label>
-            <input name='first_name' type="text" placeholder="Enter the your name">
-        </label>
-        <label for="">Last Name</label>
-        <label>
-            <input name='last_name' type="text" placeholder="Enter the your surname">
-        </label>
-        <label for="">Password</label>
+        <div class="fir_las">
+
+            <label>
+                <input id="first" name='first_name' type="text" placeholder="First name">
+            </label>
+            <label>
+                <input id="last" name='last_name' type="text" placeholder="Last name">
+            </label>
+        </div>
         <label>
             <input name='password1' type="password" placeholder="Enter the password">
         </label>
-        <label for="">Confirmation Password</label>
         <label>
             <input name='password2' type="password" placeholder="Enter again the password">
         </label>
-        <button type="submit">Send</button>
-        <p>or</p>
-        <a href="{% url 'register' %}" style="color: #007bff">Register</a>
+        <button type="submit">Create personal account</button>
+        <span class="span">
+            <span>Already have an account?</span>
+            <a href="{% url 'login' %}">Sign in</a>
+        </span>
     </form>
 
 </div>
