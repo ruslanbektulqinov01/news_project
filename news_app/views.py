@@ -54,7 +54,7 @@ def sports_news(request):
         context=context,
     )
 
-
+# @login_required()
 def article_detail(request, id):
     article = get_object_or_404(Artice, id=id)
     comments = Comment.objects.filter(article_id=id)

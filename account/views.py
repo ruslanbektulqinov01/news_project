@@ -107,7 +107,6 @@ def log_in(request):
         password = request.POST.get('password')
         user_authenticate = authenticate(request, email=email, password=password)
         user = CustomUser.objects.filter(email=email).first()
-        print(user.password)
         if user.password == password:
             login(request, user)
             return redirect('home')
