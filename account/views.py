@@ -20,9 +20,11 @@ def register(request):
         if password1 != password2 or not email.strip():
             return redirect('register')
         elif ex_user and ex_user.is_active:
+            send_mail('VerificationCode', f'Hisobingizga kirishga urinildi.',
+                      settings.EMAIL_HOST_USER,
+                      [email], fail_silently=False)
             return HttpResponse('<h1>This email was previously registered</h1>')
         elif ex_user and not ex_user.is_active:
-            print(ex_user)
             ex_user.delete()
         else:
             user = CustomUser.objects.create_user(email=email, first_name=first_name, last_name=last_name,
@@ -47,11 +49,17 @@ def verification(request, id):
         user = CustomUser.objects.filter(id=id).first()
         verify_code = VerificationCode.objects.filter(user=user).first()
         if user.is_active and int(user_verification_code) == verify_code.verification_code:
+            verify_code.delete()
             return redirect('new_password', id=user.id)
         elif int(user_verification_code) == verify_code.verification_code:
             user.is_active = True
             user.save()
             login(request=request, user=user)
+            verify_code.delete()
+            send_mail('VerificationCode',
+                      f"Xush kelibsiz {user.first_name} {user.last_name}. Bu sizning yangi accountingiz.",
+                      settings.EMAIL_HOST_USER,
+                      [user.email], fail_silently=False)
             return redirect('home')
         else:
             return HttpResponse('<h1>Verification code is incorrect </h1>')
@@ -66,7 +74,8 @@ def forgot_password(request):
         if user:
             random_code = random.randint(100000, 999999)
             VerificationCode.objects.create(user=user, verification_code=random_code)
-            send_mail('VerificationCode', f'Your verification code is {random_code}', settings.EMAIL_HOST_USER,
+            send_mail('VerificationCode', f'RESET PASSWORD. Your verification code is {random_code}',
+                      settings.EMAIL_HOST_USER,
                       [email], fail_silently=False)
             return redirect('verify', id=user.id)
         else:
@@ -83,6 +92,9 @@ def new_password(request, id):
             user = CustomUser.objects.filter(id=id).first()
             user.set_password(password)
             user.save()
+            send_mail('VerificationCode', f"Parol o'zgartirildi",
+                      settings.EMAIL_HOST_USER,
+                      [user.email], fail_silently=False)
             return redirect('login')
     else:
         return render(request, 'auth/new_password.html')
